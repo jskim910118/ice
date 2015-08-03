@@ -526,10 +526,6 @@ public class PlotEditor extends EditorPart {
 
 		// Draw the plot
 		try {
-			if (independentSeries instanceof ConnectionSeries) {
-				selectedService.getPlot()
-						.setIndependentSeries(independentSeries);
-			}
 			selectedService.getPlot().draw(plotComposite);
 			body.layout();
 		} catch (Exception e) {

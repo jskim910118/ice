@@ -214,12 +214,20 @@ public class VisItVizService extends AbstractVizService {
 		// Set the data source for the file.
 		plot.setDataSource(file);
 
+		// Set the independent series that will be plotted as the first
+		// dependent series added to this plot
+		plot.setIndependentSeries(
+				plot.getAllDependentSeries(plot.getCategories()[0]).get(0));
+
 		return plot;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.eclipse.ice.viz.service.IVizService#createCanvas(org.eclipse.ice.viz.service.datastructures.VizObject)
+	 * 
+	 * @see
+	 * org.eclipse.ice.viz.service.IVizService#createCanvas(org.eclipse.ice.viz.
+	 * service.datastructures.VizObject)
 	 */
 	@Override
 	public IVizCanvas createCanvas(VizObject object) throws Exception {
