@@ -17,6 +17,7 @@ import java.util.Map;
 import org.eclipse.ice.viz.service.ISeries;
 import org.eclipse.ice.viz.service.PlotRender;
 import org.eclipse.ice.viz.service.datastructures.VizActionTree;
+import org.eclipse.ice.viz.service.styles.BasicErrorStyle;
 import org.eclipse.ice.viz.service.styles.XYZAxisStyle;
 import org.eclipse.ice.viz.service.styles.XYZPlotStyle;
 import org.eclipse.jface.action.Action;
@@ -112,29 +113,34 @@ public class CSVPlotRender extends PlotRender {
 		addSeriesTree = new VizActionTree("Add Series");
 		removeSeriesTree = new VizActionTree("Remove Series");
 		final Separator separator = new Separator();
-		final VizActionTree clearAction = new VizActionTree(new Action("Clear Plot") {
-			@Override
-			public void run() {
-				clear();
-				refresh();
-			}
-		});
+		final VizActionTree clearAction = new VizActionTree(
+				new Action("Clear Plot") {
+					@Override
+					public void run() {
+						clear();
+						refresh();
+					}
+				});
 
 		// Fill out the add series tree. This tree will never need to be
 		// updated.
 		for (ISeries series : plot.getAllDependentSeries(null)) {
 			if (series != null) {
-				// Create Actions for all the types. Each Action should call
-				// addSeries(...) with the specified series
-				final ISeries finSeries = series;
-				addSeriesTree.add(new VizActionTree(new Action(series.getLabel()) {
-					@Override
-					public void run() {
-						finSeries.setEnabled(true);
-						addSeries(finSeries);
-						refresh();
-					}
-				}));
+
+				if (!(series.getStyle() instanceof BasicErrorStyle)) {
+					// Create Actions for all the types. Each Action should call
+					// addSeries(...) with the specified series
+					final ISeries finSeries = series;
+					addSeriesTree.add(
+							new VizActionTree(new Action(series.getLabel()) {
+								@Override
+								public void run() {
+									finSeries.setEnabled(true);
+									addSeries(finSeries);
+									refresh();
+								}
+							}));
+				}
 
 				// Add the series to plot right away to the provider if it is
 				// enabled
@@ -246,14 +252,15 @@ public class CSVPlotRender extends PlotRender {
 
 			final ISeries finSeries = series;
 			// Add an ActionTree to remove the series.
-			VizActionTree tree = new VizActionTree(new Action(series.getLabel()) {
-				@Override
-				public void run() {
-					removeSeries(finSeries);
-					finSeries.setEnabled(false);
-					refresh();
-				}
-			});
+			VizActionTree tree = new VizActionTree(
+					new Action(series.getLabel()) {
+						@Override
+						public void run() {
+							removeSeries(finSeries);
+							finSeries.setEnabled(false);
+							refresh();
+						}
+					});
 			removeSeriesTree.add(tree);
 
 			// Store the series and ActionTree for later reference.

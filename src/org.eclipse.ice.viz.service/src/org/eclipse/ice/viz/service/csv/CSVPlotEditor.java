@@ -17,7 +17,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.swt.widgets.Composite;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.draw2d.LightweightSystem;
 import org.eclipse.ice.viz.service.ISeries;
@@ -46,6 +45,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Canvas;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Slider;
 import org.eclipse.swt.widgets.Text;
@@ -55,7 +55,6 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.EditorPart;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 
 /**
  * This is an editor for displaying an SWT XYGraph used to draw plots from CSV
@@ -299,6 +298,7 @@ public class CSVPlotEditor extends EditorPart {
 					if (!seriesMap.containsKey(parent)) {
 						List<ISeries> errors = new ArrayList<ISeries>();
 						errors.add(series);
+						seriesMap.put(parent, errors);
 						// Otherwise, just add this series to the existing list
 						// of error series for the parent. Do not add the same
 						// error series twice!
